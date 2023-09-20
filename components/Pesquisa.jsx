@@ -2,13 +2,13 @@ import { useForm } from "react-hook-form"
 
 export default function Pesquisa(props) {
 
-  const { register, handleSubmit, reset, lowerPrice } = useForm()
+  const { register, handleSubmit, reset } = useForm()
 
-  async function limpa() {
+  async function limpa(data) {
     reset({
       pesq: ""
     })
-    await props.mostra()
+    await props.mostra(props)
   }
 
   return (
@@ -28,7 +28,10 @@ export default function Pesquisa(props) {
         <button className="btn btn-warning" type="reset">Ver Todos</button>
       </div>
       <div className="col-12">
-      <select id="sort-by" name="sort-by" class="naoexiste"><option value="lowerPrice">Menores Preços</option><option value="higherPrice">Maiores Preços</option></select>
+        <select className="form-select" {...register("orderby")}>
+          <option value="lowerPrice">Menores Preços</option>
+          <option value="higherPrice">Maiores Preços</option>
+        </select>
       </div>
 
     </form>

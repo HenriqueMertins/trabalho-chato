@@ -15,6 +15,9 @@ export default function Titulo() {
           <li className="nav-item">
             <Link className="nav-link" href="/listagem">Listagem</Link>
           </li>
+          <li className="nav-item">
+            <Link className="nav-link" href="/chart">Gráfico</Link>
+          </li>
         </ul>
       </div>
     </nav>

@@ -53,6 +53,7 @@ export default function Listagem() {
   ))
 
   async function filtraDados(data) {
+    console.log("componente " + data.orderby)
     if (data.pesq.length < 2) {
       Swal.fire("Digite, no mínimo, 2 caracteres")
       return
@@ -83,8 +84,11 @@ export default function Listagem() {
     // setFilmes(dados)
   }
 
-  async function mostraTodos() {
+  async function mostraTodos(data) {
+    console.log("componente " + data)
     const response = await fetch("http://localhost:3004/filmes")
+    //http://localhost:3004/filmes?_sort=diaria&_order=asc
+
     const dados = await response.json()
     setFilmes(dados)
   }
