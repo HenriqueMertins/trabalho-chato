@@ -1,62 +1,67 @@
 'use client'
-import 'react-toastify/dist/ReactToastify.css'
-import { Chart } from 'react-google-charts';
-import { useEffect, useState } from "react"
-
-
-var groupBy = require('json-groupby')
-
-export const data = [
-    ["Local", "Quantidade"],
-    ["Campo", 11],
-    ["Praia", 2],
-    ["Montanhoso", 2],
-    ["Cidade", 2],
-];
+import React, { useEffect, useState } from "react";
+import { Chart } from "react-google-charts";
 
 export const options = {
-    title: "GeolocalizaçAo",
+  title: "Geolocalização",
 };
 
-export default function App() {
-    const [busca, setBusca] = useState([])
-    const [group, setGroup] = useState([])
-    const [isLoading, setIsLoading] = useState(true)
+export default function OriginalChart() {
+  const [busca, setBusca] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-    useEffect(() => {
-        async function getGroup() {
-            const response = await fetch("http://localhost:3004/filmes")
-            var buscaTemp = await response.json()
-            var groupTemp = groupBy(buscaTemp, ["classif"], ["id"])
-            setGroup(groupTemp)
-            setBusca(buscaTemp)
-            setIsLoading(false)
-        }
-        getGroup()
-    }, [])
-    if (isLoading) {
-        return (
-            <div className="container">
-                <h2>Quartos de Hotel</h2>
-                <h5>Aguarde... Carregando os dados</h5>
-            </div>
-        )
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const response = await fetch("http://localhost:3004/filmes");
+        const data = await response.json();
+        setBusca(data);
+        setIsLoading(false);
+      } catch (error) {
+        console.error("Erro ao buscar dados:", error);
+        setIsLoading(false);
+      }
     }
+    fetchData();
+  }, []);
 
-    console.log(busca)
-
-    console.log("******")
-    console.log(group)
-
+  if (isLoading) {
     return (
-        <div className='py-10'>
-            <Chart
-                chartType="PieChart"
-                data={data}
-                options={options}
-                width={"100%"}
-                height={"400px"}
-            />
-        </div>
-    )
+      <div className="container">
+        <h2>Quartos de Hotel</h2>
+        <h5>Aguarde... Carregando os dados</h5>
+      </div>
+    );
+  }
+
+  // Criar os dados para o gráfico com base nos dados obtidos do backend
+  const chartData = [["Local", "Quantidade"]];
+  const dataCount = {};
+
+  // Contar a quantidade de cada tipo de local
+  busca.forEach((item) => {
+    const local = item.classif;
+    if (dataCount[local]) {
+      dataCount[local] += 1;
+    } else {
+      dataCount[local] = 1;
+    }
+  });
+
+  // Preencher os dados do gráfico
+  Object.keys(dataCount).forEach((local) => {
+    chartData.push([local, dataCount[local]]);
+  });
+
+  return (
+    <div className="py-10">
+      <Chart
+        chartType="PieChart"
+        data={chartData}
+        options={options}
+        width={"100%"}
+        height={"400px"}
+      />
+    </div>
+  );
 }
