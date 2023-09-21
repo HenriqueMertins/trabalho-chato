@@ -53,7 +53,6 @@ export default function Listagem() {
   ))
 
   async function filtraDados(data) {
-    console.log("componente " + data.orderby)
     if (data.pesq.length < 2) {
       Swal.fire("Digite, no mínimo, 2 caracteres")
       return
@@ -63,13 +62,13 @@ export default function Listagem() {
     // -----------------------------------------------
     const pesquisa = data.pesq.toUpperCase()
 
-    const response = await fetch("http://localhost:3004/filmes")
+    const response = await fetch("http://localhost:3004/filmes?_sort=diaria&_order=" + data.orderby)
     const dados = await response.json()
 
     const novosDados = dados.filter(filme =>
       filme.titulo.toUpperCase().includes(pesquisa) || filme.promocao.toUpperCase().includes(pesquisa)
     )
-    
+
     if (novosDados.length == 0) {
       Swal.fire("Não há filmes com a palavra chave informada...")
       return
@@ -85,9 +84,7 @@ export default function Listagem() {
   }
 
   async function mostraTodos(data) {
-    console.log("componente " + data)
-    const response = await fetch("http://localhost:3004/filmes")
-    //http://localhost:3004/filmes?_sort=diaria&_order=asc
+    const response = await fetch("http://localhost:3004/filmes?_sort=diaria&_order=" + data.orderby)
 
     const dados = await response.json()
     setFilmes(dados)

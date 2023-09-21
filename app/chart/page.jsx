@@ -47,11 +47,14 @@ export default function OriginalChart() {
       dataCount[local] = 1;
     }
   });
-
   // Preencher os dados do gráfico
   Object.keys(dataCount).forEach((local) => {
     chartData.push([local, dataCount[local]]);
   });
+
+  console.log(dataCount)
+  console.log("***********")
+  console.log(chartData)
 
   return (
     <div className="py-10">

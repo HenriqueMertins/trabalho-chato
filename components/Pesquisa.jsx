@@ -4,17 +4,17 @@ export default function Pesquisa(props) {
 
   const { register, handleSubmit, reset } = useForm()
 
-  async function limpa(data) {
+  async function limpa() {
     reset({
       pesq: ""
     })
-    await props.mostra(props)
+    await handleSubmit(props.mostra)
   }
 
   return (
     <form className="row row-cols-lg-auto g-3 align-items-center"
       onSubmit={handleSubmit(props.filtra)}
-      onReset={limpa}>
+      onReset={handleSubmit(props.mostra)}>
       <div className="col-12">
         <input type="text" className="form-control"
           placeholder="Pesquisa hotel ou promoção"
@@ -29,8 +29,8 @@ export default function Pesquisa(props) {
       </div>
       <div className="col-12">
         <select className="form-select" {...register("orderby")}>
-          <option value="lowerPrice">Menores Preços</option>
-          <option value="higherPrice">Maiores Preços</option>
+          <option value="asc">Menores Preços</option>
+          <option value="desc">Maiores Preços</option>
         </select>
       </div>
 
